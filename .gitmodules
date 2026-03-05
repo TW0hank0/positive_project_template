@@ -1,5 +1,3 @@
 [submodule "positive_license_tool"]
 	path = positive_license_tool
 	url = https://github.com/TW0hank0/positive_license_tool.git
-	branch = master
-	update = rebase
