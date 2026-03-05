@@ -1,0 +1,4 @@
+[core]
+    autocrlf = true
+[safe]
+    crlf = false
