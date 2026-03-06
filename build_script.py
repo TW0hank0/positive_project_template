@@ -1,16 +1,52 @@
 import subprocess
 import sys
-import os
+import platform
+
+# import os
 import time
-import workflow
+
+from positive_tool import pt
+
+from workflow import zip_files
 
 
 class Config:
     project_name: str = "PROJECT_NAME"
+    """**必要**
+
+    專案名稱
+
+    change it to project's name"""
+    project_version: str = "0.1.0"
+    """未啟動 `auto_detect_project_version` 時需手動更改
+    change it to project's version when auto_detect_project_version is False"""
+    auto_detect_project_version: bool = True
+    """使用 `positive_tool` 取得專案版本"""
     is_rust_project: bool = True
+    """change it if project use rust"""
     is_python_project: bool = True
+    """change it if project use python"""
     enable_pyinstaller: bool = False
+    """change it if project use pyinstaller"""
     pyinstaller_spec_path: str = ""
+    """change it if project use pyinstaller to spec file's path"""
+    pyinstaller_dist_filename: str = ""
+    """if project use pyinstaller to the exec file in spec file"""
+
+    def __init__(self) -> None:
+        match platform.system():
+            case "Windows":
+                self.pyinstaller_dist_filename = (
+                    self.pyinstaller_dist_filename
+                    if self.pyinstaller_dist_filename == ""
+                    else (self.pyinstaller_dist_filename + ".exe")
+                )
+        #
+        if self.auto_detect_project_version is True:
+            project_info = pt.ProjectInfo(
+                self.project_name, auto_get=True
+            )
+            self.project_version = str(project_info.project_version)
 
 
 def main():
@@ -19,8 +55,13 @@ def main():
     if config.is_rust_project:
         rust_command()
     print("-" * 10, "zip file", "-" * 10)
-    workflow.zi
-    print("-" * 20)
+    zip_files.main(
+        config.is_rust_project,
+        config.is_python_project,
+        config.project_name,
+        config.project_version,
+    )
+    print("-" * 10, "Summary", "-" * 10)
     print("finish in", time.time() - start_time)
 
 
