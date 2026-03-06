@@ -2,7 +2,7 @@ import subprocess
 import sys
 import os
 import time
-import workflow_ci
+import workflow
 
 
 class Config:
@@ -19,7 +19,7 @@ def main():
     if config.is_rust_project:
         rust_command()
     print("-" * 10, "zip file", "-" * 10)
-    workflow_ci.zi
+    workflow.zi
     print("-" * 20)
     print("finish in", time.time() - start_time)
 
